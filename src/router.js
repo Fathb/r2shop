@@ -5,6 +5,7 @@ import ProductDetailPage from './views/ProductDetailPage.vue';
 const routes = [
   { path: '/', component: Home },
   { path: '/product/:id', component: ProductDetailPage, props: true },
+  { path: '/:pathMatch(.*)', component: Home },
 ];
 
 const router = createRouter({
