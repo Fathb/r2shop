@@ -7,9 +7,8 @@ const routes = [
   { path: '/product/:id', component: ProductDetailPage, props: true },
   { path: '/:pathMatch(.*)', component: Home },
 ];
-
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/r2shop/"),
   routes,
 });
 
