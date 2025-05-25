@@ -8,7 +8,7 @@ const routes = [
   { path: '/:pathMatch(.*)', component: Home },
 ];
 const router = createRouter({
-  history: createWebHistory("/r2shop/"),
+  history: createWebHistory(),
   routes,
 });
 

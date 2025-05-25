@@ -3,8 +3,9 @@
     <h3>{{ product.Nama }}</h3>
     <img :src="product.Gambar" alt="Product Image" />
     <h4>{{product.Harga}}</h4>
-    <button @click="buyOnTokopedia">Beli di Tokopedia</button>
-    <button @click="buyOnWhatsApp">Beli via WhatsApp</button>
+    <button v-if="product['link toko'] != ''" @click="buyOnTokopedia">Beli di Tokopedia</button>
+    <button class="shopee" v-if="product['link shopee'] != ''" @click="buyOnShopee">Beli di Shopee</button>
+    <button class="wa" @click="buyOnWhatsApp">WA Penjual</button>
     <hr>
     <p>{{ product.Keterangan }}</p>
   </div>
@@ -26,13 +27,25 @@
     background-color: #04AA6D; /* Green */
     border: none;
     border-radius: 8px;
-    color: white;
+    color: black;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    font-weight: bold;
     margin: 20px;
+    box-shadow: .3px .3px 2px black;
+  }
+
+  button.wa {
+    background-color: transparent;
+    border: .2px solid green;
+    box-shadow: .3px .3px 8px green;
+  }
+
+  button.shopee {
+    background-color: #F93827;	
   }
 </style>
 
@@ -63,6 +76,9 @@ export default {
     },
     buyOnTokopedia() {
       window.open(this.product["link toko"], '_blank');
+    },
+    buyOnShopee() {
+      window.open(this.product["link shopee"], '_blank');
     },
     buyOnWhatsApp() {
       window.open(this.product["link wa"], '_blank');
