@@ -1,8 +1,12 @@
 <template>
   <div class="product-card" @click="goToDetail">
-    <img :src="product.Gambar" alt="Product Image"/>
+    <img :src="product.Gambar" alt="Product Image" />
     <h3>{{ product.Nama }}</h3>
-    <p>{{ product.Harga }}</p>
+    <p>
+      {{
+        new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(product.Harga)
+      }}
+    </p>
   </div>
 </template>
 
@@ -11,10 +15,10 @@ export default {
   props: ['product'],
   methods: {
     goToDetail() {
-      this.$router.push(`/product/${this.product.Kode}`);
+      this.$router.push(`/product/${this.product.Kode}`)
     },
   },
-};
+}
 </script>
 
 <style scoped>
@@ -31,4 +35,3 @@ export default {
   border-radius: 4px;
 }
 </style>
-
