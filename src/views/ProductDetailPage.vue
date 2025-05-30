@@ -7,6 +7,7 @@
         new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(product.Harga)
       }}
     </h4>
+    <button  @click="addToCart(product)">Masukkan Keranjang</button>
     <button v-if="product['link toko'] != ''" @click="buyOnTokopedia">Beli di Tokopedia</button>
     <button class="shopee" v-if="product['link shopee'] != ''" @click="buyOnShopee">
       Beli di Shopee
@@ -55,40 +56,26 @@ button.shopee {
 }
 </style>
 
-<script>
-import axios from 'axios'
+<script setup>
+import { useProductStore } from '@/stores/products'
+import { useCartStore } from '@/stores/cartStore'
 
-export default {
-  props: ['id'],
-  data() {
-    return {
-      product: null,
+const productStore = useProductStore()
+const cartStore = useCartStore()
+
+const {id} = defineProps(["id"])
+productStore.fetchProducts()
+const product = productStore.products.find(p=>p.Kode === id)
+function buyOnTokopedia () {
+      window.open(product['link toko'], '_blank')
     }
-  },
-  created() {
-    this.fetchProduct()
-  },
-  methods: {
-    async fetchProduct() {
-      try {
-        const response = await axios.get(
-          `https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec?sheet=products`
-        )
-        const products = response.data
-        this.product = products.find((p) => p.Kode == this.id)
-      } catch (error) {
-        console.error('Error fetching product data:', error)
-      }
-    },
-    buyOnTokopedia() {
-      window.open(this.product['link toko'], '_blank')
-    },
-    buyOnShopee() {
-      window.open(this.product['link shopee'], '_blank')
-    },
-    buyOnWhatsApp() {
-      window.open(this.product['link wa'], '_blank')
-    },
-  },
-}
+function buyOnShopee() {
+      window.open(product['link shopee'], '_blank')
+    }
+function buyOnWhatsApp() {
+      window.open(product['link wa'], '_blank')
+    }
+function addToCart(product){
+	cartStore.addToCart(product)
+	}
 </script>

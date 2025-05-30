@@ -1,5 +1,9 @@
 <template>
   <div>
+	<nav>
+      <router-link to="/">Beranda</router-link>
+      <router-link to="/cart">Keranjang ({{ cartItemCount }})</router-link>
+    </nav>
     <router-view></router-view>
   </div>
 </template>
@@ -32,3 +36,11 @@ header {
   }
 }
 </style>
+
+<script setup>
+import { useCartStore } from '@/stores/cartStore';
+import { computed } from 'vue';
+
+const cartStore = useCartStore();
+const cartItemCount = computed(() => cartStore.cartTotal);
+</script>

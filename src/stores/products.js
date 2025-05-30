@@ -14,7 +14,6 @@ export const useProductStore = defineStore('product', {
 
   getters: {
     filteredProducts() {
-      console.log(this.products)
       return this.products.filter((product) => {
         const matchCategory = this.filters.tipe !== '' ? product.tipe === this.filters.tipe : true
 
