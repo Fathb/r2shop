@@ -28,6 +28,9 @@ img {
   border-radius: 10px;
   padding: 5px;
   width: 80%;
+  height: 400px;
+  max-width: 400px;
+  object-fit: cover;
   box-shadow: 0.3px 0.3px 2px 1px rgba(0, 0, 0, 1);
 }
 button {

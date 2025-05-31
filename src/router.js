@@ -13,8 +13,8 @@ const routes = [
   },
   { path: '/product/:id', component: ProductDetailPage, props: true },
   {
-    path: '/checkout',
-    name: 'Checkout',
+    path: '/transaction',
+    name: 'Transacton',
     component: Checkout,
   },
   { path: '/:pathMatch(.*)', component: Home },

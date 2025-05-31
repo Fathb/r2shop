@@ -3,6 +3,7 @@
 	<nav>
       <router-link to="/">Beranda</router-link>
       <router-link to="/cart">Keranjang ({{ cartItemCount }})</router-link>
+      <router-link to="/transaction">daftar trx </router-link>
     </nav>
     <router-view></router-view>
   </div>

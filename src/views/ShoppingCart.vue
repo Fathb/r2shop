@@ -4,34 +4,71 @@
     <div v-if="cartItems.length === 0">Keranjang Anda kosong.</div>
     <ul v-else>
       <li v-for="item in cartItems" :key="item.Kode">
-        {{ item.Nama }} x{{ item.quantity }} - Rp{{ item.Harga * item.quantity }}
-        <button @click="removeFromCart(item.Kode)">Hapus</button>
+		<div>
+		  {{ item.Nama }} Rp. {{item.Harga}} x {{ item.quantity }} - Rp. {{ item.Harga * item.quantity }}
+		</div>
+		<div>
+		  <button @click="cart.decreaseQuantity(item.id)" class="icon-button">
+            <span class="material-icons">remove</span>
+          </button>
+          <button @click="cart.increaseQuantity(item.id)" class="icon-button">
+            <span class="material-icons">add</span>
+          </button>
+          <button @click="removeFromCart(item.Kode)">Hapus</button>
+		</div>
       </li>
     </ul>
     <div v-if="cartItems.length > 0">
       <p>Total: Rp {{ amountTotal }}</p>
     </div>
-	<!-- Tombol Checkout -->
-    <button @click="showCheckoutModal" class="checkout-btn">Checkout</button>
+	<button @click="showModal = true">Checkout</button>
+
+    <!-- Modal Checkout -->
+    <CheckoutModal
+      v-if="showModal"
+      @submit="handleCheckout"
+      @close="showModal = false"
+    />	
   </div>
 </template>
 
 <script setup>
 	import { useCartStore } from '../stores/cartStore';
 	import { computed, ref } from 'vue';
+	import { useRouter } from 'vue-router';
+	import CheckoutModal from '@/components/CheckoutModal.vue';
 
     const cartStore = useCartStore();
+	const router = useRouter();
 
-
-	function showCheckoutModal() {
-		checkoutModal.value = true;
-	}	
-	
-	const checkoutModal = ref(false);
+	const showModal = ref(false);
 	
     const cartItems = computed(()=>cartStore.cartItems);
 	const amountTotal = computed(()=>cartStore.amountTotal);
     const removeFromCart = cartStore.removeFromCart;
+	function handleCheckout(formData) {
+	  let items = cartStore.cartItems.map(i=>{
+		return {
+		  Nama: i.Nama,
+		  Harga: i.Harga,
+		  Kode: i.Kode,
+		  quantity: i.quantity,
+		  subtotal: i.quantity * i.Harga
+		}
+	  })
+	  const transactionData = {
+	    customer: formData,
+	    items: items
+	  }
+	  
+	  alert(JSON.stringify(transactionData));
+	
+	  localStorage.setItem("currentTransaction",JSON.stringify(transactionData))
+	
+	  cartStore.clearCart();
+	  showModal.value = false
+	  router.push('/transaction')
+	}	
 </script>
 
 <style scoped>
@@ -60,6 +97,14 @@
 	  padding: 5px 10px;
 	  cursor: pointer;
 	  border-radius: 4px;
+	  margin-right: 5px;
+	}
+	.shopping-cart button.icon-button {
+	  background-color: #0000ff;
+	  color: black;
+	  padding: 1px;
+	  font-size: 10px;
+	  border-radius: 50%;
 	}
 	.shopping-cart button:hover {
 	  background-color: #c0392b;

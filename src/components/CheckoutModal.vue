@@ -1,0 +1,66 @@
+<template>
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <form @submit.prevent="submit">
+        <h2>Checkout</h2>
+
+        <input v-model="form.name" placeholder="Nama" required />
+        <input v-model="form.address" placeholder="Alamat" required />
+        <input v-model="form.whatsapp" placeholder="Nomor WA" required />
+
+        <select v-model="form.payment" required>
+          <option value="cod">Cash on Delivery</option>
+          <option value="transfer">Bank Transfer</option>
+        </select>
+
+        <div class="modal-buttons">
+          <button type="submit">Lanjut</button>
+          <button type="button" @click="$emit('close')">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { reactive } from 'vue'
+
+const emit = defineEmits(['submit', 'close'])
+
+const form = reactive({
+  name: '',
+  address: '',
+  whatsapp: '',
+  payment: 'cod'
+})
+
+function submit() {
+  emit('submit', { ...form })
+}
+</script>
+
+<style scoped>
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  max-width: 400px;
+  margin: 10% auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+</style>
+
