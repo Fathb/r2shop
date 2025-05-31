@@ -1,40 +1,69 @@
 <template>
   <div>
-	<nav>
-      <router-link to="/">Beranda</router-link>
-      <router-link to="/cart">Keranjang ({{ cartItemCount }})</router-link>
-      <router-link to="/transaction">daftar trx </router-link>
+	<nav class="bottom-navbar">
+	 <div class="nav-list">
+      <router-link to="/" class="nav-item">
+		<i class="material-icons">home</i>
+		<small>	Home </small>
+	  </router-link>
+      <router-link to="/cart" class="nav-item">
+		<i class="material-icons">shopping_cart_checkout</i>
+		<small> Keranjang </small>
+	  </router-link>
+      <router-link to="/transaction" class="nav-item">
+		<i class="material-icons">receipt_long</i>
+		<small> Pesanan </small>
+	  </router-link>
+	 </div>
     </nav>
     <router-view></router-view>
   </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #0ffff0;
+  border-top: 1px solid #ccc;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.nav-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.nav-item:hover {
+  background-color: #f2f2f2;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.material-icons {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 3px;
 }
 </style>
 

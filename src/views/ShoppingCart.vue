@@ -8,20 +8,22 @@
 		  {{ item.Nama }} Rp. {{item.Harga}} x {{ item.quantity }} - Rp. {{ item.Harga * item.quantity }}
 		</div>
 		<div>
-		  <button @click="cart.decreaseQuantity(item.id)" class="icon-button">
+			<button @click="cartStore.minQuant(item.Kode)" class="icon-button min" v-if="item.quantity > 1">
             <span class="material-icons">remove</span>
           </button>
-          <button @click="cart.increaseQuantity(item.id)" class="icon-button">
+          <button @click="cartStore.plusQuant(item.Kode)" class="icon-button add">
             <span class="material-icons">add</span>
           </button>
-          <button @click="removeFromCart(item.Kode)">Hapus</button>
+          <button @click="removeFromCart(item.Kode)" class="icon-button rm">
+			<span class="material-icons">delete</span>
+		  </button>
 		</div>
       </li>
     </ul>
     <div v-if="cartItems.length > 0">
       <p>Total: Rp {{ amountTotal }}</p>
     </div>
-	<button @click="showModal = true">Checkout</button>
+	<button v-if="cartItems.length > 0" @click="showModal = true" class="checkout-btn">Checkout</button>
 
     <!-- Modal Checkout -->
     <CheckoutModal
@@ -57,7 +59,10 @@
 		}
 	  })
 	  const transactionData = {
-	    customer: formData,
+		customer: {
+		  ...formData,
+		  amountTotal: cartStore.amountTotal
+		},
 	    items: items
 	  }
 	  
@@ -89,22 +94,36 @@
 	  display: flex;
 	  justify-content: space-between;
 	  margin-bottom: 8px;
+	  width: 100%;
 	}
-	.shopping-cart button {
-	  background-color: #e74c3c;
-	  color: white;
-	  border: none;
-	  padding: 5px 10px;
-	  cursor: pointer;
-	  border-radius: 4px;
-	  margin-right: 5px;
+	li div:nth-child(1) {
+	  width: 80%;
+	  border-bottom: .2px dotted black;
+	  border-right: .1px dashed purple;
+	  margin-right: auto;
+	}
+	li div:nth-child(2){
+	  width:25%;
+	  border-right: 2px dashed red;
+	  display: flex;
+	  align-items: end;
 	}
 	.shopping-cart button.icon-button {
-	  background-color: #0000ff;
-	  color: black;
+	  background-color: #dd0000;
+	  color: darkblue;
+	  border: none;
+	  cursor: pointer;
+	  border-radius: 4px;
+	  margin:auto 3px;
 	  padding: 1px;
-	  font-size: 10px;
-	  border-radius: 50%;
+	}
+	button.icon-button.min{
+	  background-color: yellow;
+	  margin-left: auto;
+	}
+	button.icon-button.add{
+	  background-color: green;
+	  margin-left: auto;
 	}
 	.shopping-cart button:hover {
 	  background-color: #c0392b;

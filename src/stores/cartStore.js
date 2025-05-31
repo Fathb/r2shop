@@ -32,7 +32,17 @@ export const useCartStore = defineStore('cart', {
     },
 	saveCart() {
       localStorage.setItem('cartItems', JSON.stringify(this.items))
-    }
+    },
+	plusQuant(id){
+		let prod = this.items.find(it=>it.Kode==id);
+		prod.quantity +=1
+		this.saveCart();
+	},
+	minQuant(id){
+		let prod = this.items.find(it=>it.Kode==id);
+		prod.quantity -=1
+		this.saveCart();
+	}
   },
 });
 

@@ -52,7 +52,7 @@
 	    <tfoot>
 	      <tr>
 	        <td colspan="3" >total Pesanan</td>
-			<td>Rp. {{cart.amountTotal}}</td>
+			<td>Rp. {{transaction.customer.amountTotal}}</td>
 	      </tr>
 	    </tfoot>
 	  </table>
