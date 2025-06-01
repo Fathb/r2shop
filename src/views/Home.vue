@@ -29,7 +29,9 @@ h1 {
 .product-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-around;
+  gap: 10px;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 </style>

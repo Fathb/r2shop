@@ -9,6 +9,7 @@
       <router-link to="/cart" class="nav-item">
 		<i class="material-icons">shopping_cart_checkout</i>
 		<small> Keranjang </small>
+		<span v-if="cartItemCount>0">{{cartItemCount}}</span>
 	  </router-link>
       <router-link to="/transaction" class="nav-item">
 		<i class="material-icons">receipt_long</i>
@@ -54,10 +55,26 @@
   color: #333;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
+}
+
+.nav-item span {
+  position: absolute;
+  top: .1px;
+  right: .1px;
+  padding: 1px;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  height: 13px;
+  width: 13px;
+  text-align: center;
 }
 
 .nav-item:hover {
   background-color: #f2f2f2;
+  padding: 5px;
+  border-radius: 8px;
 }
 
 .material-icons {
