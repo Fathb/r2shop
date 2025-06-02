@@ -57,10 +57,39 @@ function submit() {
   border-radius: 8px;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, select {
+  padding: 8px;
+  margin-bottom: 5px;
+  outline: none;
+  border: .2px solid blueviolet;
+  border-radius: 8px;
+}
+
 .modal-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 16px;
+}
+.modal-buttons button {
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: .5px .5px 1px black;
+  font-weight: bold;
+}
+.modal-buttons button[type="submit"] {
+  margin-right: 15px;
+  background-color: #00f000;
+}
+.modal-buttons button[type="button"] {
+  background-color: red;
 }
 </style>
 

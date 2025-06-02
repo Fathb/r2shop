@@ -70,23 +70,36 @@
   padding-top: 0;
   text-align: left;
 }
+.data-pelanggan table th {
+  width: 25vw;
+  max-width: 200px;
+  background: none;
+}
+.data-pelanggan tr:nth-child(even) {
+  background-color: #D0F0C0;
+}
+.data-pelanggan tr:nth-child(odd) {
+  background-color: #F0FFF0;
+}
 table {
   width: 98%;
-  margin-left: 1.3rem;
-  margin-top: 0;
-  margin-bottom: 3rem;
   border: none;
   border-collapse: collapse;
+}
+.data-items tr {
+  border-bottom: .5px solid black;
+}
+.data-items td {
+  padding: 8px 1px;
 }
 tfoot tr {
   margin-top: 10px;
   border: .5px solid black;
   background-color: #dddddd;
-  padding: 8px 0;
-
 }
 th {
   background-color: rgba(50, 150, 255, .3);
+  padding: 8px 4px;
 }
 h1 {
 text-align: center;
