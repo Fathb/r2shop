@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Detail Transaksi</h1>
+  <h1>Detail Transaksi</h1>
+  <div v-if="transaction">
 
     <div class="data-pelanggan">
       <h3>Data Pelanggan</h3>
@@ -9,22 +9,22 @@
 		  <tr>
 		    <th>Nama</th>
 		    <td>:</td>
-  		    <td>{{ transaction.customer.name }}</td>
+  		    <td>{{ transaction.name }}</td>
 		  </tr>
 		  <tr>
 		    <th>Alamat</th>
   		    <td>:</td>
-  		    <td>{{ transaction.customer.address }}</td>
+  		    <td>{{ transaction.address }}</td>
   		  </tr>
 	  	  <tr>
 		    <th>No WA</th>
   	  	    <td>:</td>
-  	  	    <td>{{ transaction.customer.whatsapp }}</td>
+  	  	    <td>{{ transaction.whatsapp }}</td>
   	  	  </tr>
 	  	  <tr>
 		    <th>Metode Bayar</th>
   	  	    <td>:</td>
-  	  	    <td>{{ transaction.customer.payment }}</td>
+  	  	    <td>{{ transaction.payment }}</td>
   	  	  </tr>
  		</tbody>
  	  </table>
@@ -52,7 +52,7 @@
 	    <tfoot>
 	      <tr>
 	        <td colspan="3" >total Pesanan</td>
-			<td>Rp. {{transaction.customer.amountTotal}}</td>
+			<td>Rp. {{transaction.amountTotal}}</td>
 	      </tr>
 	    </tfoot>
 	  </table>
@@ -60,9 +60,15 @@
 
     <button @click="confirmOrder">Buat Pesanan</button>
   </div>
+  <div v-else class="kosong">
+	  <strong>tidak ditemukan transaksi dengan id {{id}}</strong>
+  </div>
 </template>
 
 <style scoped>
+.kosong {
+  text-align: center;
+}
 .data-pelanggan {
   text-align: left;
 }
@@ -108,32 +114,48 @@ background-color: #00aa00;
 h3 {
   margin-bottom: .7rem;
 }
+button {
+  margin: 15px 15px;
+  padding: 8px;
+  background-color: lightgreen;
+  border-radius: 8px;
+  outline: none;
+}
 </style>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import { useCartStore } from '@/stores/cartStore'
-import { onMounted, ref } from 'vue'
+import { useTransactionStore } from '@/stores/transaction';
 
-const router = useRouter()
-const cart = useCartStore()
+const dataTransaction = useTransactionStore();
+dataTransaction.loadTransactions()
+const {id} = defineProps(["id"]);
+const transaction = dataTransaction.transactions[id-1]
 
-const transaction = ref({ customer: {}, items: [] })
+const confirmOrder =async () => {
+ // const allTransactions = JSON.parse(localStorage.getItem('transactions') || '[]')
+ // allTransactions.push(transaction.value)
+ // localStorage.setItem('transactions', JSON.stringify(allTransactions))
+ // 
+ // alert(JSON.stringify(allTransactions))
+ // localStorage.removeItem("transactions")
 
-onMounted(() => {
-  const data = localStorage.getItem('currentTransaction')
-  if (data) {
-    transaction.value = JSON.parse(data)
-  }
-})
+ // cart.clearCart()
+  
+  //alert(JSON.stringify(transactionData))
 
-const confirmOrder = () => {
-  const allTransactions = JSON.parse(localStorage.getItem('transactions') || '[]')
-  allTransactions.push(transaction.value)
-  localStorage.setItem('transactions', JSON.stringify(allTransactions))
+	const textMsg = `detail pesanan saya:
+	nama : ${transaction.value.name}
+	alamat : ${transaction.value.address}
+	pembayaran : ${transaction.value.payment}
 
-  cart.clearCart()
-  localStorage.removeItem('currentTransaction')
-  router.push('/')
+	detail items
+	nama * Harga * vol * subtotal\n`+transaction.value.items.map(i=>`- ${i.Nama} * ${i.Harga} * ${i.quantity} * ${i.subtotal}`).join("\n")+`\n
+	total harga item: Rp. ${transaction.value.amountTotal}
+
+	berapa total dengan ongkirnya bang???`;
+
+	window.open("http://wa.me/6282245965486?text="+encodeURI(textMsg))
+
+	
 }
 </script>

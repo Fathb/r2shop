@@ -16,7 +16,11 @@ export const useCartStore = defineStore('cart', {
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        this.items.push({ ...product, quantity: 1 });
+        this.items.push({ 
+		  Kode: product.Kode,
+		  Nama: product.Nama,
+		  Harga: product.Harga,
+		  quantity: 1 });
       }
 	  this.saveCart();
       this.updateTotal();

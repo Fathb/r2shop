@@ -10,11 +10,11 @@
     </p>
 	</div>
 	<div class="actions">
-	  <span class="action shopee" @click="openShopee">
+	  <span class="action shopee" @click="openShopee" v-if="product['link shopee']">
 		<i class="material-icons">local_mall</i>
 		<small>Shopee</small>
 	  </span>
-	  <span class="action tokopedia" @click="openToped">
+	  <span class="action tokopedia" @click="openToped" v-if="product['link toko']">
 		<i class="material-icons">shopping_bag</i>
 		<small>Tokopedia</small>
 	  </span>
@@ -61,13 +61,14 @@ function openToped() {
   border-radius: 4px;
 }
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 .action {
  display: flex;
  flex-direction: column;
- justify-content: start;
+ width: 30%;
 }
 .material-icons {
   font-size: 2.4rem;

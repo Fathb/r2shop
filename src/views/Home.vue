@@ -16,10 +16,11 @@
 import { useProductStore } from '@/stores/products'
 import ProductCard from '@/components/ProductCard.vue'
 import ProductFilter from '@/components/ProductFilter.vue'
+import {onBeforeMount} from 'vue'
 
 const productStore = useProductStore()
 
-productStore.fetchProducts()
+onBeforeMount(()=>productStore.fetchProducts())
 </script>
 
 <style scoped>

@@ -5,8 +5,8 @@
         <h2>Checkout</h2>
 
         <input v-model="form.name" placeholder="Nama" required />
-        <input v-model="form.address" placeholder="Alamat" required />
-        <input v-model="form.whatsapp" placeholder="Nomor WA" required />
+        <textarea v-model="form.address" placeholder="Alamat" required rows="8" />
+        <input type="number" v-model="form.whatsapp" placeholder="Nomor WA" required />
 
         <select v-model="form.payment" required>
           <option value="cod">Cash on Delivery</option>
@@ -62,12 +62,16 @@ form {
   flex-direction: column;
 }
 
-input, select {
+input, select, textarea {
   padding: 8px;
   margin-bottom: 5px;
   outline: none;
   border: .2px solid blueviolet;
   border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
 }
 
 .modal-buttons {

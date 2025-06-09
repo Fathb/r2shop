@@ -35,45 +35,55 @@
 </template>
 
 <script setup>
-	import { useCartStore } from '../stores/cartStore';
-	import { computed, ref } from 'vue';
-	import { useRouter } from 'vue-router';
-	import CheckoutModal from '@/components/CheckoutModal.vue';
-
-    const cartStore = useCartStore();
-	const router = useRouter();
-
-	const showModal = ref(false);
-	
-    const cartItems = computed(()=>cartStore.cartItems);
-	const amountTotal = computed(()=>cartStore.amountTotal);
-    const removeFromCart = cartStore.removeFromCart;
-	function handleCheckout(formData) {
-	  let items = cartStore.cartItems.map(i=>{
-		return {
-		  Nama: i.Nama,
-		  Harga: i.Harga,
-		  Kode: i.Kode,
-		  quantity: i.quantity,
-		  subtotal: i.quantity * i.Harga
-		}
-	  })
-	  const transactionData = {
-		customer: {
-		  ...formData,
-		  amountTotal: cartStore.amountTotal
-		},
-	    items: items
-	  }
-	  
-	  alert(JSON.stringify(transactionData));
-	
-	  localStorage.setItem("currentTransaction",JSON.stringify(transactionData))
-	
-	  cartStore.clearCart();
-	  showModal.value = false
-	  router.push('/transaction')
-	}	
+  import { useCartStore } from '../stores/cartStore';
+  import { useTransactionStore } from '@/stores/transaction';
+  import { computed, ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import CheckoutModal from '@/components/CheckoutModal.vue';
+  import axios from 'axios';
+  
+  const cartStore = useCartStore();
+  const transactionStore = useTransactionStore();
+  transactionStore.loadTransactions();
+  const router = useRouter();
+  
+  const showModal = ref(false);
+  
+  const cartItems = computed(()=>cartStore.cartItems);
+  const amountTotal = computed(()=>cartStore.amountTotal);
+  const removeFromCart = cartStore.removeFromCart;
+  async function handleCheckout(formData) {
+    let items = cartStore.cartItems.map(i=>{
+  	return {
+  	  Nama: i.Nama,
+  	  Harga: i.Harga,
+  	  Kode: i.Kode,
+  	  quantity: i.quantity,
+  	  subtotal: i.quantity * i.Harga
+  	}
+    })
+    const transactionData = {
+	  id: transactionStore.transactions.length + 1,
+  	  ...formData,
+  	  amountTotal: cartStore.amountTotal,
+  	  items: items,
+    }
+  
+    let next = confirm("data keranjang akan dihapus setelah dibuat pesanan");
+    if (next) {
+		const response = await axios.post('https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec',JSON.stringify({...transactionData, sheet:"orders"}));
+  
+      if (response.status === 200) {
+		transactionStore.addTransaction(transactionData)
+    	cartStore.clearCart();
+        showModal.value = false
+        router.push('/transaction/'+transactionData.id)
+      }
+  
+  
+      
+    }
+  }	
 </script>
 
 <style scoped>
@@ -142,4 +152,3 @@
 	  background-color: #45a049;
 	}
 </style>
-

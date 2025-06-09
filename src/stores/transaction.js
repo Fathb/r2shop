@@ -2,32 +2,32 @@ import { defineStore } from 'pinia';
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
-    customer: {
-      name: '',
-      address: '',
-      phone: '',
-      paymentMethod: '',
-    },
-    items: [],
-    isCheckedOut: false,
+    transactions: []  // Menyimpan semua transaksi
   }),
   actions: {
-    setCustomerData(data) {
-      this.customer = data;
+    // Menambahkan transaksi baru ke dalam history
+    addTransaction(transaction) {
+      this.transactions.push(transaction);
+	  this.saveTransactions();
     },
-    addItemToTransaction(product) {
-      this.items.push(product);
+    // Memuat transaksi dari backend atau localStorage
+    async loadTransactions() {
+      try {
+        // Misalnya kita mengambil data transaksi dari API atau localStorage
+        const storedTransactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        this.transactions = storedTransactions;
+      } catch (error) {
+        console.error('Failed to load transactions:', error);
+      }
     },
-    clearTransaction() {
-      this.customer = {
-        name: '',
-        address: '',
-        phone: '',
-        paymentMethod: '',
-      };
-      this.items = [];
-      this.isCheckedOut = false;
-    },
-  },
-  //persist: true, // Menyimpan state ke localStorage
+    // Menyimpan transaksi ke localStorage
+    saveTransactions() {
+      try {
+        localStorage.setItem('transactions', JSON.stringify(this.transactions));
+      } catch (error) {
+        console.error('Failed to save transactions:', error);
+      }
+    }
+  }
 });
+

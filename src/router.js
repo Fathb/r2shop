@@ -11,16 +11,17 @@ const routes = [
     name: 'cart',
     component: ShoppingCart,
   },
-  { path: '/product/:id', component: ProductDetailPage, props: true },
+	{ path: '/product/:id', component: ProductDetailPage, props: true, name:"detail Product" },
   {
-    path: '/transaction',
+	path: '/transaction/:id',
     name: 'Transacton',
     component: Checkout,
+	props: true
   },
   { path: '/:pathMatch(.*)', component: Home },
 ];
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/"),
   routes,
 });
 

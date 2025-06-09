@@ -28,9 +28,13 @@ export const useProductStore = defineStore('product', {
         return matchCategory && matchSearch && matchPrice
       })
     },
+	
   },
 
   actions: {
+	oneProduct(id){
+	  return this.products.find(p=>p.Kode===id)
+	},
     async fetchProducts() {
       try {
         const response = await axios.get(

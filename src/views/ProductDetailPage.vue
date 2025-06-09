@@ -62,21 +62,24 @@ button.shopee {
 <script setup>
 import { useProductStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cartStore'
+import {computed} from 'vue'
 
 const productStore = useProductStore()
 const cartStore = useCartStore()
 
 const {id} = defineProps(["id"])
-productStore.fetchProducts()
-const product = productStore.products.find(p=>p.Kode === id)
+productStore.fetchProducts();
+const product = computed(()=>productStore.oneProduct(id))
+document.title = product.value.Nama;
+ 
 function buyOnTokopedia () {
-      window.open(product['link toko'], '_blank')
+      window.open(product.value['link toko'], '_blank')
     }
 function buyOnShopee() {
-      window.open(product['link shopee'], '_blank')
+      window.open(product.value['link shopee'], '_blank')
     }
 function buyOnWhatsApp() {
-      window.open(product['link wa'], '_blank')
+      window.open(product.value['link wa'], '_blank')
     }
 function addToCart(product){
 	cartStore.addToCart(product)
