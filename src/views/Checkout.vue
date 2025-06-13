@@ -58,7 +58,7 @@
 	  </table>
     </div>
 
-    <button @click="confirmOrder">Buat Pesanan</button>
+    <button @click="confirmOrder">Konfirmasi Pesanan</button>
   </div>
   <div v-else class="kosong">
 	  <strong>tidak ditemukan transaksi dengan id {{id}}</strong>
@@ -144,15 +144,18 @@ const confirmOrder =async () => {
   //alert(JSON.stringify(transactionData))
 
 	const textMsg = `detail pesanan saya:
-	nama : ${transaction.value.name}
-	alamat : ${transaction.value.address}
-	pembayaran : ${transaction.value.payment}
+	nama : ${transaction.name}
+	alamat : ${transaction.address}
+	pembayaran : ${transaction.payment}
 
 	detail items
-	nama * Harga * vol * subtotal\n`+transaction.value.items.map(i=>`- ${i.Nama} * ${i.Harga} * ${i.quantity} * ${i.subtotal}`).join("\n")+`\n
-	total harga item: Rp. ${transaction.value.amountTotal}
+	nama * Harga * vol * subtotal\n`+transaction.items.map(i=>`- ${i.Nama} * ${i.Harga} * ${i.quantity} * ${i.subtotal}`).join("\n")+`\n
+	total harga item: Rp. ${transaction.amountTotal}
 
 	berapa total dengan ongkirnya bang???`;
+
+	transaction.isCheckedOut = true;
+	dataTransaction.saveTransactions();
 
 	window.open("http://wa.me/6282245965486?text="+encodeURI(textMsg))
 

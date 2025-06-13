@@ -15,6 +15,10 @@
 		<i class="material-icons">receipt_long</i>
 		<small> Pesanan </small>
 	  </router-link>
+	  <router-link to="/testimoni" class="nav-item">
+		<i class="material-icons">reviews</i>
+		<small> Testimoni </small>
+	  </router-link>
 	 </div>
     </nav>
     <router-view></router-view>

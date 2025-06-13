@@ -67,6 +67,7 @@
   	  ...formData,
   	  amountTotal: cartStore.amountTotal,
   	  items: items,
+	  isCheckedOut: "Belum Co"
     }
   
     let next = confirm("data keranjang akan dihapus setelah dibuat pesanan");
