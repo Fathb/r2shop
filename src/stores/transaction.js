@@ -27,7 +27,11 @@ export const useTransactionStore = defineStore('transaction', {
       } catch (error) {
         console.error('Failed to save transactions:', error);
       }
-    }
+    },
+	clearTrx(){
+	  localStorage.removeItem("transactions");
+	  this.loadTransactions();
+	}
   }
 });
 

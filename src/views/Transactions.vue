@@ -6,25 +6,25 @@
       <li v-for="(transaction, index) in transactions" :key="index">
         <div class="trxCard" :class="transaction.isCheckedOut?'finish':'unfinish'"  @click="toDetails(transaction.id)">
           <strong>{{ transaction.name }}</strong><br />
-          Alamat: {{ transaction.address }}<br />
-          No. WA: {{ transaction.whatsapp }}<br />
 		  Metode Pembayaran: {{ transaction.payment }}<br/>
-		  {{ (transaction.isCheckedOut ? "status: sudah co" : undefined) }}<br />
+		  {{ (transaction.isCheckedOut ? "status: sudah co" : "status: belum co") }}<br />
 		  <strong>Total Harga Barang: {{transaction.amountTotal}}</strong>
         </div>
       </li>
     </ul>
+	<button @click="trxStore.clearTrx">bersihkan transaksi</button>
   </div>
 </template>
 
 <script setup>
 import router from '@/router';
 import {useTransactionStore} from '@/stores/transaction';
+import {computed} from 'vue';
 
 
 const trxStore = useTransactionStore();
 trxStore.loadTransactions();
-const transactions = trxStore.transactions;
+const transactions = computed(()=>trxStore.transactions);
 
 function toDetails(id){
   router.push("/transaction/"+id)
@@ -32,6 +32,9 @@ function toDetails(id){
 </script>
 
 <style scoped>
+h2 {
+ text-align: center;
+}
 li {
  list-style-type: none;
  margin-left: -25px;

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="product">
+  <p v-if="!product">Loading...</p>
+  <div v-else>
     <h3>{{ product.Nama }}</h3>
     <img :src="product.Gambar" alt="Product Image" />
     <h4>
@@ -16,7 +17,6 @@
     <hr />
     <p>{{ product.Keterangan }}</p>
   </div>
-  <p v-else>Loading...</p>
 </template>
 
 <style scoped>
@@ -62,15 +62,15 @@ button.shopee {
 <script setup>
 import { useProductStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cartStore'
-import {computed} from 'vue'
+import {computed, watchEffect} from 'vue'
 
 const productStore = useProductStore()
 const cartStore = useCartStore()
-
 const {id} = defineProps(["id"])
-productStore.fetchProducts();
-const product = computed(()=>productStore.oneProduct(id))
-document.title = product.value.Nama;
+
+const products = computed(()=>productStore.products)
+let product = computed(()=> products.value.find(p=>p.Kode===id))
+
  
 function buyOnTokopedia () {
       window.open(product.value['link toko'], '_blank')
@@ -81,7 +81,12 @@ function buyOnShopee() {
 function buyOnWhatsApp() {
       window.open(product.value['link wa'], '_blank')
     }
-function addToCart(product){
-	cartStore.addToCart(product)
+function addToCart(p){
+	cartStore.addToCart(p)
 	}
+watchEffect(() => {
+  if (product.value && product.value.Nama) {
+    document.title = product.value.Nama
+  }
+})
 </script>

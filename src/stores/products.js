@@ -3,13 +3,14 @@ import axios from 'axios'
 
 export const useProductStore = defineStore('product', {
   state: () => ({
-    products: [],
+	products:[],
     filters: {
       tipe: '',
       priceMin: 0,
       priceMax: 999999,
       search: '',
     },
+	id:""
   }),
 
   getters: {
@@ -44,8 +45,8 @@ export const useProductStore = defineStore('product', {
       } catch (err) {
         this.error = err.message || 'Gagal memuat produk'
       } finally {
-        this.products
-      }
+		this.products
+	  }
     },
 
     setFilter(key, value) {

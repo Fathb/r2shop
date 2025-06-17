@@ -90,8 +90,11 @@
 
 <script setup>
 import { useCartStore } from '@/stores/cartStore';
+import { useProductStore } from './stores/products';
 import { computed } from 'vue';
 
 const cartStore = useCartStore();
+const productStore = useProductStore();
+productStore.fetchProducts();
 const cartItemCount = computed(() => cartStore.cartTotal);
 </script>

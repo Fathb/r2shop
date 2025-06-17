@@ -32,7 +32,7 @@ const routes = [
   { path: '/:pathMatch(.*)', component: Home },
 ];
 const router = createRouter({
-  history: createWebHistory("/"),
+  history: createWebHistory(),
   routes,
 });
 
