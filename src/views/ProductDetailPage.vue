@@ -2,7 +2,7 @@
   <p v-if="!product">Loading...</p>
   <div v-else>
     <h3>{{ product.Nama }}</h3>
-    <img :src="product.Gambar" alt="Product Image" />
+    <img :src="product.Gambar+'&sz=w500'" alt="Product Image" />
     <h4>
       {{
         new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(product.Harga)

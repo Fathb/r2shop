@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
 	<nav class="bottom-navbar">
 	 <div class="nav-list">
       <router-link to="/" class="nav-item">
@@ -26,6 +26,10 @@
 </template>
 
 <style scoped>
+.container {
+  width: 100vw;
+  height: 100vh;
+}
 .bottom-navbar {
   position: fixed;
   bottom: 0;
@@ -92,9 +96,12 @@
 import { useCartStore } from '@/stores/cartStore';
 import { useProductStore } from './stores/products';
 import { computed } from 'vue';
+import {useTransactionStore} from './stores/transaction';
 
 const cartStore = useCartStore();
 const productStore = useProductStore();
+const trxs = useTransactionStore();
 productStore.fetchProducts();
+trxs.loadTransactions();
 const cartItemCount = computed(() => cartStore.cartTotal);
 </script>

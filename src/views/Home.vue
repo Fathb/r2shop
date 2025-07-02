@@ -2,7 +2,10 @@
   <div>
     <h1>Produk di Toko-R2</h1>
     <ProductFilter />
-    <div class="product-list">
+    <div v-if="productStore.filteredProducts.length < 1">
+	  loading ......
+	</div>
+    <div class="product-list" v-else>
       <ProductCard
         v-for="product in productStore.filteredProducts"
         :key="product.Kode"

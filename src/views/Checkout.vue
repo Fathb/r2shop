@@ -26,6 +26,11 @@
   	  	    <td>:</td>
   	  	    <td>{{ transaction.payment }}</td>
   	  	  </tr>
+		  <tr>
+		    <th>Status</th>
+  	  	    <td>:</td>
+  	  	    <td>{{ transaction.status }}</td>
+  	  	  </tr>
  		</tbody>
  	  </table>
     </div>
@@ -44,21 +49,21 @@
 	    <tbody>
 	      <tr v-for="(item, index) in transaction.items" :key="index">
 			  <td>{{item.Nama}}</td>
-			  <td>{{item.Harga}}</td>
+			  <td>{{formatCurrnecy(item.Harga)}}</td>
 			  <td>{{item.quantity}}</td>
-			  <td>Rp. {{item.subtotal}}</td>
+			  <td>{{formatCurrnecy(item.subtotal)}}</td>
 	      </tr>
 	    </tbody>
 	    <tfoot>
 	      <tr>
 	        <td colspan="3" >total Pesanan</td>
-			<td>Rp. {{transaction.amountTotal}}</td>
+			<td>{{formatCurrnecy(transaction.amountTotal)}}</td>
 	      </tr>
 	    </tfoot>
 	  </table>
     </div>
 
-    <button @click="confirmOrder">Konfirmasi Pesanan</button>
+    <button @click="confirmOrder" v-if="transaction.status == 'Belum Konfirmasi'">Konfirmasi Pesanan</button>
   </div>
   <div v-else class="kosong">
 	  <strong>tidak ditemukan transaksi dengan id {{id}}</strong>
@@ -67,7 +72,12 @@
 
 <style scoped>
 .kosong {
+  width: 50%;
+  height: 50%;
+  margin: auto;
   text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
 }
 .data-pelanggan {
   text-align: left;
@@ -124,12 +134,13 @@ button {
 </style>
 
 <script setup>
+import {formatCurrnecy} from '@/helpers';
 import { useTransactionStore } from '@/stores/transaction';
 
 const dataTransaction = useTransactionStore();
-dataTransaction.loadTransactions()
+//dataTransaction.loadTransactions()
 const {id} = defineProps(["id"]);
-const transaction = dataTransaction.transactions[id-1]
+const transaction = dataTransaction.filteredTrx[id]
 
 const confirmOrder =async () => {
  // const allTransactions = JSON.parse(localStorage.getItem('transactions') || '[]')
@@ -142,6 +153,7 @@ const confirmOrder =async () => {
  // cart.clearCart()
   
   //alert(JSON.stringify(transactionData))
+	//const response = await axios.post('https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec',JSON.stringify({...transaction, sheet:"orders"}));
 
 	const textMsg = `detail pesanan saya:
 	nama : ${transaction.name}
@@ -149,8 +161,8 @@ const confirmOrder =async () => {
 	pembayaran : ${transaction.payment}
 
 	detail items
-	nama * Harga * vol * subtotal\n`+transaction.items.map(i=>`- ${i.Nama} * ${i.Harga} * ${i.quantity} * ${i.subtotal}`).join("\n")+`\n
-	total harga item: Rp. ${transaction.amountTotal}
+	nama * Harga * vol * subtotal\n`+transaction.items.map(i=>`- ${i.Nama} * ${formatCurrnecy(i.Harga)} * ${i.quantity} * ${formatCurrnecy(i.subtotal)}`).join("\n")+`\n
+	total harga item: ${formatCurrnecy(transaction.amountTotal)}
 
 	berapa total dengan ongkirnya bang???`;
 

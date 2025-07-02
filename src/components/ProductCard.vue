@@ -5,7 +5,7 @@
     <h3>{{ product.Nama }}</h3>
     <p>
       {{
-        new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(product.Harga)
+       formatCurrnecy(product.Harga)
       }}
     </p>
 	</div>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import {formatCurrnecy} from '@/helpers';
 import router from '@/router';
 import { useCartStore } from '@/stores/cartStore';
 

@@ -8,10 +8,10 @@
 		  {{ item.Nama }} Rp. {{item.Harga}} x {{ item.quantity }} - Rp. {{ item.Harga * item.quantity }}
 		</div>
 		<div>
-			<button @click="cartStore.minQuant(item.Kode)" class="icon-button min" v-if="item.quantity > 1">
+		  <button @click="cartStore.minQuant(item.Kode)" class="icon-button min" v-if="item.quantity > 1">
             <span class="material-icons">remove</span>
           </button>
-          <button @click="cartStore.plusQuant(item.Kode)" class="icon-button add">
+          <button @click="cartStore.plusQuant(item.Kode)" class="icon-button add" :style="item.quantity < 2 ?'margin-left:auto':null">
             <span class="material-icons">add</span>
           </button>
           <button @click="removeFromCart(item.Kode)" class="icon-button rm">
@@ -63,22 +63,23 @@
   	}
     })
     const transactionData = {
-	  id: transactionStore.transactions.length + 1,
   	  ...formData,
   	  amountTotal: cartStore.amountTotal,
   	  items: items,
-	  isCheckedOut: "Belum Co"
+	  status: "Belum Konfirmasi"
     }
   
     let next = confirm("data keranjang akan dihapus setelah dibuat pesanan");
     if (next) {
+		localStorage.setItem("user",formData.whatsapp);
 		const response = await axios.post('https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec',JSON.stringify({...transactionData, sheet:"orders"}));
   
       if (response.status === 200) {
-		transactionStore.addTransaction(transactionData)
+		localStorage.setItem("noWA", formData["whatsapp"])
+		await transactionStore.loadTransactions()
     	cartStore.clearCart();
         showModal.value = false
-        router.push('/transaction/'+transactionData.id)
+        router.push('/transaction')
       }
   
   
@@ -125,7 +126,7 @@
 	  border: none;
 	  cursor: pointer;
 	  border-radius: 4px;
-	  margin:auto 3px;
+	  margin:3px;
 	  padding: 1px;
 	}
 	button.icon-button.min{
@@ -134,7 +135,6 @@
 	}
 	button.icon-button.add{
 	  background-color: green;
-	  margin-left: auto;
 	}
 	.shopping-cart button:hover {
 	  background-color: #c0392b;

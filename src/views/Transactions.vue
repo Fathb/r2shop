@@ -4,27 +4,27 @@
     <div v-if="transactions.length === 0">Tidak ada transaksi yang ditemukan.</div>
     <ul>
       <li v-for="(transaction, index) in transactions" :key="index">
-        <div class="trxCard" :class="transaction.isCheckedOut?'finish':'unfinish'"  @click="toDetails(transaction.id)">
+        <div class="trxCard" :class="transaction.status === 'Belum Konfirmasi'?'unfinish':'finish'"  @click="toDetails(transaction.id)">
           <strong>{{ transaction.name }}</strong><br />
 		  Metode Pembayaran: {{ transaction.payment }}<br/>
-		  {{ (transaction.isCheckedOut ? "status: sudah co" : "status: belum co") }}<br />
-		  <strong>Total Harga Barang: {{transaction.amountTotal}}</strong>
+		  {{ (transaction.status ? "status: "+transaction.status : "status: null") }}<br />
+		  <strong>Total Harga Barang: {{formatCurrnecy(transaction.amountTotal)}}</strong>
         </div>
       </li>
     </ul>
-	<button @click="trxStore.clearTrx">bersihkan transaksi</button>
   </div>
 </template>
 
 <script setup>
+import {formatCurrnecy} from '@/helpers';
 import router from '@/router';
 import {useTransactionStore} from '@/stores/transaction';
 import {computed} from 'vue';
 
 
 const trxStore = useTransactionStore();
-trxStore.loadTransactions();
-const transactions = computed(()=>trxStore.transactions);
+//trxStore.loadTransactions();
+const transactions = computed(()=>trxStore.filteredTrx);
 
 function toDetails(id){
   router.push("/transaction/"+id)

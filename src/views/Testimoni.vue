@@ -1,7 +1,8 @@
 <template>
   <div class="testimoni-gallery">
     <h1>Galeri Testimoni</h1>
-    <div class="gallery">
+	<div v-if="images.length < 1">Loading ......</div>
+    <div class="gallery" v-else>
       <img
         v-for="(image, index) in images"
         :key="index"
