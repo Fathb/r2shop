@@ -1,3 +1,4 @@
+import {sheetTrx, sheetUrl} from '@/settings';
 import axios from 'axios';
 import { defineStore } from 'pinia';
 
@@ -7,10 +8,10 @@ export const useTransactionStore = defineStore('transaction', {
 	noWa: localStorage.getItem("noWA") || ""
   }),
   getters: {
-	filteredTrx({noWa}){
+	filteredTrx({noWa,transactions}){
 	  //let noWa = localStorage.getItem("noWA");
 	  let id = 0
-	  return this.transactions.filter(trx=>{
+	  return transactions.filter(trx=>{
 		trx.whatsapp==noWa ? (trx.id = id, id++ ) : void(0);
 		return trx.whatsapp==noWa
 	  })
@@ -18,16 +19,16 @@ export const useTransactionStore = defineStore('transaction', {
   },
   actions: {
     // Menambahkan transaksi baru ke dalam history
-    addTransaction(transaction) {
-      this.transactions.push(transaction);
-	  this.saveTransactions();
+    async addTransaction(transaction) {
+	  let response = await axios.post('https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec',JSON.stringify({...transaction, sheet:sheetTrx}))
+	  return response
     },
     // Memuat transaksi dari backend atau localStorage
     async loadTransactions() {
       try {
         // Misalnya kita mengambil data transaksi dari API atau localStorage
-		let data = (await axios.get("https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec?sheet=orders")).data;
-		data = (await data).map(function (el,idx) {
+		let data = (await axios.get(sheetUrl+sheetTrx)).data;
+		data = (await data).map(function (el) {
 		  let items = []
 		  let item = {}
 		  el.items = el.items.split(",")

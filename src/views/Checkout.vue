@@ -140,7 +140,7 @@ import { useTransactionStore } from '@/stores/transaction';
 const dataTransaction = useTransactionStore();
 //dataTransaction.loadTransactions()
 const {id} = defineProps(["id"]);
-const transaction = dataTransaction.filteredTrx[id]
+const transaction = dataTransaction.filteredTrx[id];
 
 const confirmOrder =async () => {
  // const allTransactions = JSON.parse(localStorage.getItem('transactions') || '[]')
@@ -165,9 +165,6 @@ const confirmOrder =async () => {
 	total harga item: ${formatCurrnecy(transaction.amountTotal)}
 
 	berapa total dengan ongkirnya bang???`;
-
-	transaction.isCheckedOut = true;
-	dataTransaction.saveTransactions();
 
 	window.open("http://wa.me/6282245965486?text="+encodeURI(textMsg))
 

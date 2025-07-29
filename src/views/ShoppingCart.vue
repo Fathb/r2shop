@@ -5,7 +5,7 @@
     <ul v-else>
       <li v-for="item in cartItems" :key="item.Kode">
 		<div>
-		  {{ item.Nama }} Rp. {{item.Harga}} x {{ item.quantity }} - Rp. {{ item.Harga * item.quantity }}
+		  {{ item.Nama }} | {{formatCurrnecy(item.Harga)}} x {{ item.quantity }} slop = {{formatCurrnecy(item.Harga * item.quantity)}}
 		</div>
 		<div>
 		  <button @click="cartStore.minQuant(item.Kode)" class="icon-button min" v-if="item.quantity > 1">
@@ -40,7 +40,7 @@
   import { computed, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import CheckoutModal from '@/components/CheckoutModal.vue';
-  import axios from 'axios';
+  import {formatCurrnecy} from '@/helpers';
   
   const cartStore = useCartStore();
   const transactionStore = useTransactionStore();
@@ -50,10 +50,10 @@
   const showModal = ref(false);
   
   const cartItems = computed(()=>cartStore.cartItems);
-  const amountTotal = computed(()=>cartStore.amountTotal);
+  const amountTotal =computed(()=>cartStore.amountTotal);
   const removeFromCart = cartStore.removeFromCart;
   async function handleCheckout(formData) {
-    let items = cartStore.cartItems.map(i=>{
+    let items = cartItems.map(i=>{
   	return {
   	  Nama: i.Nama,
   	  Harga: i.Harga,
@@ -72,7 +72,7 @@
     let next = confirm("data keranjang akan dihapus setelah dibuat pesanan");
     if (next) {
 		localStorage.setItem("user",formData.whatsapp);
-		const response = await axios.post('https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec',JSON.stringify({...transactionData, sheet:"orders"}));
+		const response = await transactionStore.addTransaction(transactionData);
   
       if (response.status === 200) {
 		localStorage.setItem("noWA", formData["whatsapp"])

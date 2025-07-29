@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import {sheetProducts,sheetUrl} from '@/settings'
 
 export const useProductStore = defineStore('product', {
   state: () => ({
@@ -39,7 +40,7 @@ export const useProductStore = defineStore('product', {
     async fetchProducts() {
       try {
         const response = await axios.get(
-          `https://script.google.com/macros/s/AKfycbw10SsWDkywsltqPWkTItEbfMMvinPhzVCeThuXePsl1_p6uX2oF71IKvQOE-lpbxBB/exec?sheet=products`
+          `${sheetUrl+sheetProducts}`
         )
         this.products = await response.data
       } catch (err) {

@@ -2,12 +2,12 @@
   <div>
     <h1>Produk di Toko-R2</h1>
     <ProductFilter />
-    <div v-if="productStore.filteredProducts.length < 1">
+    <div v-if="filteredProducts.length < 1">
 	  loading ......
 	</div>
     <div class="product-list" v-else>
       <ProductCard
-        v-for="product in productStore.filteredProducts"
+        v-for="product in filteredProducts"
         :key="product.Kode"
         :product="product"
       />
@@ -19,9 +19,11 @@
 import { useProductStore } from '@/stores/products'
 import ProductCard from '@/components/ProductCard.vue'
 import ProductFilter from '@/components/ProductFilter.vue'
+import {computed} from 'vue'
 //import {onBeforeMount} from 'vue'
 
 const productStore = useProductStore()
+const filteredProducts = computed(()=>productStore.filteredProducts)
 
 //onBeforeMount(()=>productStore.fetchProducts())
 </script>

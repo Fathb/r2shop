@@ -1,52 +1,53 @@
 // src/stores/cartStore.js
 import { defineStore } from 'pinia';
+import {computed, ref} from 'vue';
 
-export const useCartStore = defineStore('cart', {
-  state: () => ({
-    items: JSON.parse(localStorage.getItem('cartItems')) || [],
-  }),
-  getters: {
-    cartItems: (state) => state.items,
-    cartTotal: (state) => state.items.reduce((sum, item) => sum + item.quantity, 0),
-    amountTotal: (state) => state.items.reduce((sum, item) => sum + (item.quantity * item.Harga), 0)
-  },
-  actions: {
-    addToCart(product) {
-      const existingItem = this.items.find(item => item.Kode === product.Kode);
-      if (existingItem) {
-        existingItem.quantity += 1;
+export const useCartStore = defineStore('cart', ()=>{
+	const items = ref(JSON.parse(localStorage.getItem('cartItems')) || []);
+
+	const cartItems = computed(()=>items.value);
+	const cartTotal = computed(()=>items.value.reduce((sum, item) => sum + item.quantity, 0))
+	const amountTotal = computed(()=>cartItems.value.reduce((sum, item) => sum + (item.quantity * item.Harga), 0))
+
+	function addToCart(product) {
+      const existingitem = items.value.find(item => item.Kode === product.Kode);
+      if (existingitem) {
+        existingitem.quantity += 1;
       } else {
-        this.items.push({ 
+        items.value.push({ 
 		  Kode: product.Kode,
 		  Nama: product.Nama,
 		  Harga: product.Harga,
 		  quantity: 1 });
       }
-	  this.saveCart();
-      this.updateTotal();
-    },
-    removeFromCart(id) {
-      this.items = this.items.filter(item => item.Kode !== id);
-	  this.saveCart();
-      this.updateTotal();
-    },
-	clearCart() {
-      this.items = []
-      this.saveCart()
-    },
-	saveCart() {
-      localStorage.setItem('cartItems', JSON.stringify(this.items))
-    },
-	plusQuant(id){
-		let prod = this.items.find(it=>it.Kode==id);
+	  saveCart();
+    }
+
+	function removeFromCart(id) {
+      items.value = items.value.filter(item => item.Kode !== id);
+	  saveCart();
+    }
+
+	function clearCart() {
+      items.value = []
+      saveCart()
+    }
+
+	function saveCart() {
+      localStorage.setItem('cartItems', JSON.stringify(items.value))
+    }
+	function plusQuant(id){
+		let prod = items.value.find(it=>it.Kode==id);
 		prod.quantity +=1
-		this.saveCart();
-	},
-	minQuant(id){
-		let prod = this.items.find(it=>it.Kode==id);
-		prod.quantity -=1
-		this.saveCart();
+		saveCart();
 	}
-  },
-});
+	function minQuant(id){
+		let prod = items.value.find(it=>it.Kode==id);
+		prod.quantity -=1
+		saveCart();
+	}
+
+	return {items,cartItems,cartTotal,amountTotal,addToCart,removeFromCart, clearCart, saveCart, plusQuant,minQuant}
+  }
+);
 
